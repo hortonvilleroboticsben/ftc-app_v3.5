@@ -61,7 +61,7 @@ public class KungTeleop extends StateMachine_v5 {
 
     @Override
     public void loop() {
-        double pos = Math.abs(((get_encoder_count(mtrArmFlip) * 360 / 1700.) % 360) / 360.);
+        double pos = Math.abs(((get_encoder_count(mtrArmFlip) * 360 / 1700.)) / 360.);
         pos += adjustment;
         pos = pos >= 1 ? 1 : pos;
 

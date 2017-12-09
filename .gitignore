@@ -12,6 +12,10 @@ gen/
 # Local configuration file (sdk path, etc)
 local.properties
 
+#Computer Specific Files
+Android.mk
+Application.mk
+
 # Windows thumbnail db
 Thumbs.db
 

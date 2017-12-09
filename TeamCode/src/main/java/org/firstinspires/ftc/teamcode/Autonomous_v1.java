@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.ams.AMSColorSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -36,8 +37,8 @@ public class Autonomous_v1 extends StateMachine_v5 {
     final byte BLUE = 1;
     final byte RED = 2;
     final double CLAW_OPEN = 1;
-    final double CLAW_HALF = .75;
-    final double CLAW_CLOSE = .5;
+    final double CLAW_HALF = .65;
+    final double CLAW_CLOSE = .06;
     byte Alliance = BLUE;
     int StartPos = 1;
     int ballPos = 1;
@@ -116,40 +117,61 @@ public class Autonomous_v1 extends StateMachine_v5 {
         initializeMachine(glyph);
         initializeMachine(arm);
 
-        double pos = Math.abs(((get_encoder_count(mtrArmFlip) * 360 / 1700.) % 360) / 360.);
+        double pos = Math.abs(((get_encoder_count(mtrArmFlip) * 360 / 1700.)) / 360.);
         pos += adjustment;
         pos = pos >= 1 ? 1 : pos;
+        pos = pos <= 0 ? 0 : pos;
         set_position(srvLevel, pos);
 
         //TODO:Scan pictograph and ball colors
 
         Drive(dt,27,0.2);
         SetFlag(dt,arm,"off platform");
+        SetFlag(dt,glyph,"off platform");
         Turn(dt, 177.5,0.2);
-        Drive(dt, 4.25, 0.2);
+        Drive(dt, 3.333, 0.2);
+        FlipArm(dt, -1600, 0.21);
+        SetFlag(dt, arm, "extended");
+        SetFlag(dt,glyph,"extended");
 
         WaitForFlag(arm,"off platform");
         MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * .4),0.5);
-
         ServoMove(arm,srvExtend,1);
-        Pause(arm, 5000);
+        Pause(arm, 5010);
+        SetFlag(arm,glyph,"start moving");
         ServoMove(arm, srvExtend, 0);
 
-        FlipArm(dt, -1385, 0.2);
-        SetFlag(dt, arm, "extended");
+        WaitForFlag(glyph,"off platform");
+        Pause(glyph,600);
+        ServoMove(glyph,srvExtend,0.25);
+        WaitForFlag(glyph,"start moving");
+        if(next_state_to_execute(glyph)){
+            adjustment+=.5;
+            incrementState(glyph);
+        }
+        WaitForFlag(glyph,"extended");
+        ServoMove(glyph,srvClaw,CLAW_HALF);
 
         WaitForFlag(arm, "extended");
         //TODO:Add hitting logic
         //TODO:Remove this (just testing)
         if(next_state_to_execute(arm)){
             if(gamepad1.x){
-                SetFlag(new StateMachine_v5(), dt, "hit");
-                SetFlag(new StateMachine_v5(), arm, "hit");
+                SetFlag(glyph, dt, "hit");
+                SetFlag(glyph, arm, "hit");
+                SetFlag(glyph,glyph,"hit");
+                incrementState(arm);
             }
         }
         WaitForFlag(arm, "hit");
         WaitForFlag(dt, "hit");
-        FlipArm(dt, 0, .2);
+        WaitForFlag(glyph,"hit");
+        if(ballPos == 1) {
+            OWTurn(dt,10,0.2);
+        } else {
+            OWTurn(dt,-10,0.2);
+        }
+        FlipArm(dt, 0, -.2);
         ServoMove(arm, srvExtend, -1);
         Pause(arm, 1500);
         SetFlag(arm, dt, "retracting");
@@ -201,8 +223,10 @@ public class Autonomous_v1 extends StateMachine_v5 {
         telemetry.addData("leftenc", get_encoder_count(mtrLeftDrive));
         telemetry.addData("rightenc", get_encoder_count(mtrRightDrive));
         telemetry.addData("armFlipEnc", get_encoder_count(mtrArmFlip));
-        telemetry.addData("pos", pos);
+        telemetry.addData("claw", srvClaw.getPosition());
         telemetry.addData("dt", dt.toString());
+        telemetry.addData("arm", arm.toString());
+        telemetry.addData("glyph", glyph.toString());
     }
 }
 
