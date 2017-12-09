@@ -11,6 +11,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.core.Mat;
 
 import java.util.Arrays;
 
@@ -139,7 +141,7 @@ public class Autonomous_v1 extends StateMachine_v5 {
         WaitForFlag(arm, "extended");
         //TODO:Add hitting logic
         //TODO:Remove this (just testing)
-        if(next_state_to_execute(new StateMachine_v5())){
+        if(next_state_to_execute(arm)){
             if(gamepad1.x){
                 SetFlag(new StateMachine_v5(), dt, "hit");
                 SetFlag(new StateMachine_v5(), arm, "hit");
@@ -201,5 +203,36 @@ public class Autonomous_v1 extends StateMachine_v5 {
         telemetry.addData("armFlipEnc", get_encoder_count(mtrArmFlip));
         telemetry.addData("pos", pos);
         telemetry.addData("dt", dt.toString());
+    }
+}
+
+class BallDetector extends StateMachine_v5 implements CameraBridgeViewBase.CvCameraViewListener2{
+    private BallColor[] ballArray = {null, null};
+
+    @Override
+    public void onCameraViewStarted(int width, int height) {
+
+    }
+
+    @Override
+    public void onCameraViewStopped() {
+
+    }
+
+    @Override
+    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+        return null;
+    }
+
+    public BallColor getLeftBall(){
+        return ballArray[0];
+    }
+
+    public BallColor getRightBall(){
+        return ballArray[1];
+    }
+
+    enum BallColor{
+        RED, BLUE;
     }
 }
