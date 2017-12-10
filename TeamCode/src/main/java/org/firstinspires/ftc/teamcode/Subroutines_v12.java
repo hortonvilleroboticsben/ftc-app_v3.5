@@ -63,7 +63,7 @@ class Subroutines_v12 extends OpMode {
         srvGr1 = addServo(0.0, "srvGr1");
         srvGr2 = addServo(0.0, "srvGr2");
         srvExtend = addCRServo("srvExtend");
-        srvClaw = addServo(0.06,"srvClaw");
+        srvClaw = addServo(0.1,"srvClaw");
         srvShift = addCRServo("srvShift");
         srvLevel = addServo(0.0,"srvLevel");
 

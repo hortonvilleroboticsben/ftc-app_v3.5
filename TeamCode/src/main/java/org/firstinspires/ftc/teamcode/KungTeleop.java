@@ -86,7 +86,7 @@ public class KungTeleop extends StateMachine_v5 {
 
         set_position(srvLevel, pos);
 
-        set_position(srvClaw, (gamepad2.left_trigger > 0.5) ? 1 : .05);
+        set_position(srvClaw, (gamepad2.left_trigger > 0.5) ? 1 : 0.1);
 
         set_power(mtrArmSpin, (Math.abs(gamepad2.left_stick_x) <= .2) ? 0 : gamepad2.left_stick_x * .5);
 
@@ -206,6 +206,7 @@ public class KungTeleop extends StateMachine_v5 {
         telemetry.addData("LiftEnc", get_encoder_count(mtrLift));
         telemetry.addData("LiftTarget", mtrLift.getTargetPosition());
         telemetry.addData("FlipEnc", get_encoder_count(mtrArmFlip));
+        telemetry.addData("SrvLevel", get_servo_position(srvLevel));
     }
 }
     

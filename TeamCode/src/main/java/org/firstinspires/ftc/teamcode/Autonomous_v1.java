@@ -37,8 +37,8 @@ public class Autonomous_v1 extends StateMachine_v5 {
     final byte BLUE = 1;
     final byte RED = 2;
     final double CLAW_OPEN = 1;
-    final double CLAW_HALF = .65;
-    final double CLAW_CLOSE = .06;
+    final double CLAW_HALF = .5;
+    final double CLAW_CLOSE = .1;
     byte Alliance = BLUE;
     int StartPos = 1;
     int ballPos = 1;
@@ -128,28 +128,29 @@ public class Autonomous_v1 extends StateMachine_v5 {
         Drive(dt,27,0.2);
         SetFlag(dt,arm,"off platform");
         SetFlag(dt,glyph,"off platform");
-        Turn(dt, 177.5,0.2);
-        Drive(dt, 3.333, 0.2);
+        Turn(dt, 174.6,0.2);
+        Drive(dt, 3.7, 0.2);
         FlipArm(dt, -1600, 0.21);
         SetFlag(dt, arm, "extended");
         SetFlag(dt,glyph,"extended");
+        Drive(dt, 1.5, 0.2);
 
         WaitForFlag(arm,"off platform");
-        MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * .4),0.5);
+        MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * .4105),0.5);
         ServoMove(arm,srvExtend,1);
         Pause(arm, 5010);
-        SetFlag(arm,glyph,"start moving");
+        //SetFlag(arm,glyph,"start moving");
         ServoMove(arm, srvExtend, 0);
 
         WaitForFlag(glyph,"off platform");
         Pause(glyph,600);
         ServoMove(glyph,srvExtend,0.25);
-        WaitForFlag(glyph,"start moving");
+        WaitForFlag(glyph,"extended");
         if(next_state_to_execute(glyph)){
             adjustment+=.5;
             incrementState(glyph);
         }
-        WaitForFlag(glyph,"extended");
+        //WaitForFlag(glyph,"start moving");
         ServoMove(glyph,srvClaw,CLAW_HALF);
 
         WaitForFlag(arm, "extended");
@@ -157,9 +158,9 @@ public class Autonomous_v1 extends StateMachine_v5 {
         //TODO:Remove this (just testing)
         if(next_state_to_execute(arm)){
             if(gamepad1.x){
-                SetFlag(glyph, dt, "hit");
-                SetFlag(glyph, arm, "hit");
-                SetFlag(glyph,glyph,"hit");
+                SetFlag(new StateMachine_v5(), dt, "hit");
+                SetFlag(new StateMachine_v5(), arm, "hit");
+                SetFlag(new StateMachine_v5(),glyph,"hit");
                 incrementState(arm);
             }
         }
@@ -167,11 +168,18 @@ public class Autonomous_v1 extends StateMachine_v5 {
         WaitForFlag(dt, "hit");
         WaitForFlag(glyph,"hit");
         if(ballPos == 1) {
-            OWTurn(dt,10,0.2);
+            MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * .05),0.5);
+            Pause(dt, 500);
+            MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * -.05),0.5);
         } else {
-            OWTurn(dt,-10,0.2);
+            MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * -.05),0.5);
+            Pause(dt, 500);
+            MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * .05),0.5);
         }
-        FlipArm(dt, 0, -.2);
+        SetFlag(dt, arm, "ready");
+        Drive(dt, -1.5, -0.2);
+        WaitForFlag(arm, "ready");
+        FlipArm(arm, 0, -.2);
         ServoMove(arm, srvExtend, -1);
         Pause(arm, 1500);
         SetFlag(arm, dt, "retracting");

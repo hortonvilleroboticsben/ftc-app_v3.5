@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-class StateMachine_v6 extends Subroutines_v12 {
+class StateMachine_v6 extends StateMachine_v5 {
 
     public String flag = "";
     int current_number = 0;                           //The order of a specific state//
