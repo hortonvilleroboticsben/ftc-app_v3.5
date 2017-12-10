@@ -164,9 +164,11 @@ public class Autonomous_v1 extends StateMachine_v5 {
                 incrementState(arm);
             }
         }
+
         WaitForFlag(arm, "hit");
         WaitForFlag(dt, "hit");
         WaitForFlag(glyph,"hit");
+
         if(ballPos == 1) {
             MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * .05),0.5);
             Pause(dt, 500);
