@@ -328,7 +328,7 @@ class StateMachine_v5 extends Subroutines_v12 {
             run_to_position(mtrArmFlip);
             set_encoder_target(mtrArmFlip, (int) encCount);
             set_power(mtrArmFlip, power);
-            if(has_encoder_reached(mtrArmFlip, encCount)) {
+            if(!mtrArmFlip.isBusy()) {
                 set_power(mtrArmFlip, 0);
                 incrementState(s);
             }

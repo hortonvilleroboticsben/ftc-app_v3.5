@@ -171,16 +171,18 @@ public class Autonomous_v1 extends StateMachine_v5 {
 
         if(ballPos == 1) {
             MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * .05),0.5);
-            Pause(dt, 500);
+            Pause(arm, 500);
             MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * -.05),0.5);
         } else {
             MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * -.05),0.5);
-            Pause(dt, 500);
+            Pause(arm, 500);
             MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * .05),0.5);
         }
-        SetFlag(dt, arm, "ready");
+        SetFlag(arm, dt, "continue");
+
+        WaitForFlag(dt, "continue");
         Drive(dt, -1.5, -0.2);
-        WaitForFlag(arm, "ready");
+
         FlipArm(arm, 0, -.2);
         ServoMove(arm, srvExtend, -1);
         Pause(arm, 1500);
