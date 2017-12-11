@@ -1,3 +1,5 @@
+//0x3c - left
+//0x6c - right
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.ams.AMSColorSensor;
@@ -9,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
@@ -37,7 +40,7 @@ public class Autonomous_v1 extends StateMachine_v5 {
     final byte BLUE = 1;
     final byte RED = 2;
     final double CLAW_OPEN = 1;
-    final double CLAW_HALF = .5;
+    final double CLAW_HALF = .4;
     final double CLAW_CLOSE = .1;
     byte Alliance = BLUE;
     int StartPos = 1;
@@ -112,7 +115,7 @@ public class Autonomous_v1 extends StateMachine_v5 {
 
     @Override
     public void loop() {
-        //RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+        RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
         initializeMachine(dt);
         initializeMachine(glyph);
         initializeMachine(arm);
@@ -128,17 +131,29 @@ public class Autonomous_v1 extends StateMachine_v5 {
         Drive(dt,27,0.2);
         SetFlag(dt,arm,"off platform");
         SetFlag(dt,glyph,"off platform");
+        //GyroTurn(dt,180,0.2);
         Turn(dt, 174.6,0.2);
         Drive(dt, 3.7, 0.2);
         FlipArm(dt, -1600, 0.21);
         SetFlag(dt, arm, "extended");
-        SetFlag(dt,glyph,"extended");
         Drive(dt, 1.5, 0.2);
 
         WaitForFlag(arm,"off platform");
         MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * .4105),0.5);
-        ServoMove(arm,srvExtend,1);
-        Pause(arm, 5010);
+        ServoMove(arm,srvExtend,.95);
+        Pause(arm, 4010);
+        SetFlag(arm,glyph,"extended");
+        WaitForFlag(arm,"extended");
+        if(ballPos == 1) {
+            MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * .05),0.5);
+            Pause(arm, 500);
+            MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * -.04),0.5);
+        } else {
+            MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * -.05),0.5);
+            Pause(arm, 500);
+            MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * .04),0.5);
+        }
+        Pause(arm, 1555);
         //SetFlag(arm,glyph,"start moving");
         ServoMove(arm, srvExtend, 0);
 
@@ -153,44 +168,46 @@ public class Autonomous_v1 extends StateMachine_v5 {
         //WaitForFlag(glyph,"start moving");
         ServoMove(glyph,srvClaw,CLAW_HALF);
 
-        WaitForFlag(arm, "extended");
         //TODO:Add hitting logic
         //TODO:Remove this (just testing)
+
+        //Pause(arm, 5000);
         if(next_state_to_execute(arm)){
-            if(gamepad1.x){
                 SetFlag(new StateMachine_v5(), dt, "hit");
                 SetFlag(new StateMachine_v5(), arm, "hit");
                 SetFlag(new StateMachine_v5(),glyph,"hit");
                 incrementState(arm);
-            }
         }
 
         WaitForFlag(arm, "hit");
         WaitForFlag(dt, "hit");
         WaitForFlag(glyph,"hit");
 
-        if(ballPos == 1) {
-            MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * .05),0.5);
-            Pause(arm, 500);
-            MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * -.05),0.5);
-        } else {
-            MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * -.05),0.5);
-            Pause(arm, 500);
-            MotorMove(arm,mtrArmSpin,(int)(1680*4.75 * .05),0.5);
-        }
+
         SetFlag(arm, dt, "continue");
 
         WaitForFlag(dt, "continue");
-        Drive(dt, -1.5, -0.2);
+        Drive(dt, -3, -0.2);
+        FlipArm(dt, 0, -.2);
 
-        FlipArm(arm, 0, -.2);
+        if(next_state_to_execute(arm)) {
+            adjustment = 0;
+            incrementState(arm);
+        }
+
+        ServoMove(arm, srvClaw, CLAW_CLOSE);
         ServoMove(arm, srvExtend, -1);
-        Pause(arm, 1500);
+        Pause(arm, 2100);
         SetFlag(arm, dt, "retracting");
         Pause(arm, 3500);
         ServoMove(arm, srvExtend, 0);
+        MotorMove(arm, mtrArmSpin, (int)(1680*4.75*-0.4), 0.4);
 
         WaitForFlag(dt, "retracting");
+        Turn(dt, 90, .2);
+        OWTurn(dt, 25, -.2);
+        Drive(dt, -32.25, -.4);
+        Turn(dt, 68, .2);
 
 
 // if (Alliance == BLUE) {
