@@ -52,15 +52,6 @@ public class Autonomous_v1 extends StateMachine_v5 {
     @Override
     public void init() {
         super.init();
-        int vuforiaID = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(vuforiaID);
-        params.vuforiaLicenseKey = "AXlr9dj/////AAAAGRujCnGOL0aIpjtd4y5IK2sFwI4jstOeOlytTrPr3jzeQQ9tGEHgLmuGdxzuxGNY5641pyXeeyJHccL+I4QCZq8Sodm5DAUBsAQQ9ox1EY3+KNfZISN06k1IqDf7YaRXhE02j+7aE4Apnm3Hvn9V5CDKSTgOq73eJId9uzHkuNaIx+UDV4fRS1HK5L6dSGmIw3+RW7uaFdBF0E2bvWzzpZv51KFzw5oy/9qFB9r6ke5B5Gd2zw9JjafwudFSpLVCiNzIreoTaIFYVMmGMuIFIT4C6oC13EcvbNl5CFpl+irLqhSI//nlL2L2DKxKtW5UTQqNBlOSBdTxWR/kSN12edlwOu0kFgzhKBFapn3KHC0V";
-        params.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        this.vl = ClassFactory.createVuforiaLocalizer(params);
-        VuforiaTrackables relicTrackables = this.vl.loadTrackablesFromAsset("RelicVuMark");
-        relicTemplate = relicTrackables.get(0);
-        relicTrackables.activate();
-
         mtrLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         mtrRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -131,7 +122,8 @@ public class Autonomous_v1 extends StateMachine_v5 {
         Drive(dt,27,0.2);
         SetFlag(dt,arm,"off platform");
         SetFlag(dt,glyph,"off platform");
-        //GyroTurn(dt,180,0.2);
+        ScanPattern(dt);
+        ScanJewels(dt);
         Turn(dt, 174.6,0.2);
         Drive(dt, 3.7, 0.2);
         FlipArm(dt, -1600, 0.21);
@@ -256,36 +248,5 @@ public class Autonomous_v1 extends StateMachine_v5 {
         telemetry.addData("dt", dt.toString());
         telemetry.addData("arm", arm.toString());
         telemetry.addData("glyph", glyph.toString());
-    }
-}
-
-class BallDetector extends StateMachine_v5 implements CameraBridgeViewBase.CvCameraViewListener2{
-    private BallColor[] ballArray = {null, null};
-
-    @Override
-    public void onCameraViewStarted(int width, int height) {
-
-    }
-
-    @Override
-    public void onCameraViewStopped() {
-
-    }
-
-    @Override
-    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
-        return null;
-    }
-
-    public BallColor getLeftBall(){
-        return ballArray[0];
-    }
-
-    public BallColor getRightBall(){
-        return ballArray[1];
-    }
-
-    enum BallColor{
-        RED, BLUE;
     }
 }
