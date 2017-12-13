@@ -41,6 +41,11 @@ class Subroutines_v12 extends OpMode {
     final byte FILTERED = 1;
     final byte CACHE = 0;
 
+    final double GR1CLOSED = 0.143;
+    final double GR1OPEN = 0.45;
+    final double GR2CLOSED = .383;
+    final double GR2OPEN = 0.7;
+
 
     @Override
     public void init() {
@@ -58,10 +63,29 @@ class Subroutines_v12 extends OpMode {
         mtrArmFlip = addMotor(MotorLocation.SHIFT,"mtrArmFlip");
         mtrArmSpin = addMotor(MotorLocation.SHIFT,"mtrArmSpin");
 
-        snsColor = addColorSensor(true,"snsColor");
+        //snsColorRight = addColorSensor(0x2a,true,"snsColorRight");
+        try {
+            snsColorRight = hardwareMap.colorSensor.get("snsColorRight");
+            snsColorRight.setI2cAddress(I2cAddr.create8bit(0x2a));
+            snsColorRight.enableLed(true);
+        } catch (Exception p_exception) {
+            addWarningMessage("snsColorRight");
+            RobotLog.i(p_exception.getLocalizedMessage());
+            snsColorRight = null;
+        }
+        //snsColorLeft = addColorSensor(0x1a,true,"snsColorLeft");
+        try {
+            snsColorLeft = hardwareMap.colorSensor.get("snsColorLeft");
+            snsColorLeft.setI2cAddress(I2cAddr.create8bit(0x1a));
+            snsColorLeft.enableLed(true);
+        } catch (Exception p_exception) {
+            addWarningMessage("snsColorLeft");
+            RobotLog.i(p_exception.getLocalizedMessage());
+            snsColorLeft = null;
+        }
 
-        srvGr1 = addServo(0.0, "srvGr1");
-        srvGr2 = addServo(0.0, "srvGr2");
+        srvGr1 = addServo(GR1OPEN, "srvGr1");
+        srvGr2 = addServo(GR2OPEN, "srvGr2");
         srvExtend = addCRServo("srvExtend");
         srvClaw = addServo(0.1,"srvClaw");
         srvShift = addCRServo("srvShift");
@@ -549,7 +573,8 @@ class Subroutines_v12 extends OpMode {
     CRServo srvShift;
     Servo srvLevel;
 
-    ColorSensor snsColor;
+    ColorSensor snsColorLeft;
+    ColorSensor snsColorRight;
     BNO055IMU IMUnav;
 
 }

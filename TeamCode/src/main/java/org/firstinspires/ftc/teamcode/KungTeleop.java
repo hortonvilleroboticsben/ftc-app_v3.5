@@ -20,10 +20,7 @@ public class KungTeleop extends StateMachine_v5 {
     final int LIFTMEDIUM = 3500;
     final int LIFTDOWN = 0;
 
-    final double GR1CLOSED = 0.143;
-    final double GR1OPEN = 0.45;
-    final double GR2CLOSED = 1;
-    final double GR2OPEN = 0;
+
 
     double gr1Val = GR1CLOSED;
 
@@ -92,6 +89,9 @@ public class KungTeleop extends StateMachine_v5 {
 
         set_position(srvExtend, gamepad2.dpad_up ? 1 : gamepad2.dpad_down ? -1 : 0);
 
+        snsColorLeft.enableLed(!gamepad1.guide);
+        snsColorRight.enableLed(!gamepad1.guide);
+
         set_position(srvGr1, (gamepad2.right_trigger >= .5) ? GR1OPEN : GR1CLOSED);
 //        if(gamepad2.right_bumper && !gr1OS) {
 //            gr1Val = (GR1pos == 0) ? GR1OPEN : GR1CLOSED;
@@ -99,7 +99,7 @@ public class KungTeleop extends StateMachine_v5 {
 //            gr1OS = true;
 //        }
 //        if(!gamepad2.right_bumper) gr1OS = false;
-        //set_position(srvGr2, (gamepad2.right_trigger > 0.5) ? 0.0 : 0.25);
+        set_position(srvGr2, (gamepad2.right_bumper) ? GR2OPEN : GR2CLOSED);
 
         if (gamepad1.x && flipOS) {
             flipOS = false;
@@ -145,6 +145,8 @@ public class KungTeleop extends StateMachine_v5 {
                     }
                 }
 
+
+
                 if (next_state_to_execute(robotFront)) {
                     resetMachine(robotFront);
                     run_using_encoder(mtrLift);
@@ -171,6 +173,7 @@ public class KungTeleop extends StateMachine_v5 {
                     set_encoder_target(mtrFlip, FLIPDOWN);
                     set_power(mtrFlip, -0.7);
                     srvGr1.setPosition(GR1CLOSED);
+                    srvGr2.setPosition(GR2CLOSED);
                     if (has_encoder_reached(mtrFlip, FLIPDOWN)) {
                         reset_encoders(mtrFlip);
                         set_power(mtrFlip, 0);
@@ -201,12 +204,18 @@ public class KungTeleop extends StateMachine_v5 {
             }
         }
         //srvGr1.setPosition(gr1Val);
-        telemetry.addData("GR1pos", GR1pos);
-        telemetry.addData("ArmFlipEnc", get_encoder_count(mtrArmFlip));
-        telemetry.addData("LiftEnc", get_encoder_count(mtrLift));
-        telemetry.addData("LiftTarget", mtrLift.getTargetPosition());
-        telemetry.addData("FlipEnc", get_encoder_count(mtrArmFlip));
-        telemetry.addData("SrvLevel", get_servo_position(srvLevel));
+//        telemetry.addData("GR1pos", GR1pos);
+//        telemetry.addData("ArmFlipEnc", get_encoder_count(mtrArmFlip));
+//        telemetry.addData("LiftEnc", get_encoder_count(mtrLift));
+//        telemetry.addData("LiftTarget", mtrLift.getTargetPosition());
+//        telemetry.addData("FlipEnc", get_encoder_count(mtrArmFlip));
+//        telemetry.addData("SrvLevel", get_servo_position(srvLevel));
+        telemetry.addData("rightblue", snsColorRight.blue());
+        telemetry.addData("rightargb",snsColorRight.argb());
+        telemetry.addData("rightred", snsColorRight.red());
+        telemetry.addData("leftblue",snsColorLeft.blue());
+        telemetry.addData("leftargb",snsColorLeft.argb());
+        telemetry.addData("leftred",snsColorLeft.red());
     }
 }
     
