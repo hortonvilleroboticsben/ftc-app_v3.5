@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 
-@TeleOp(name = "MotorTest20:1", group = "Test")
+//@TeleOp(name = "MotorTest20:1", group = "Test")
 public class MotorTest20To1 extends OpMode
 {
 

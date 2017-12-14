@@ -37,7 +37,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 
-@Autonomous(name="VuforiaTesting", group ="Concept")
+//@Autonomous(name="VuforiaTesting", group ="Concept")
 public class VuforiaTesting extends StateMachine_v5 {
 
     VuforiaLocalizer vl;

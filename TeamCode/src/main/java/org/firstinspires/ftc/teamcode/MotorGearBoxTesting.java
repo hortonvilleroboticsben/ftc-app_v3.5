@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "MotorGearBoxTesting", group = "Testing")
+//@TeleOp(name = "MotorGearBoxTesting", group = "Testing")
 public class MotorGearBoxTesting extends StateMachine_v5 {
 
 

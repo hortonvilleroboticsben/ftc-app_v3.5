@@ -11,8 +11,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
-@TeleOp(name = "KungTeleop", group = "Testing")
-public class KungTeleop extends StateMachine_v5 {
+@TeleOp(name = "TeleOp", group = "Competition")
+public class TeleOp_V1 extends StateMachine_v5 {
 
     StateMachine_v5 robotFront = new StateMachine_v5();
 

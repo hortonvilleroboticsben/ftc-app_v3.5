@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.util.RobotLog;
 
 
-@TeleOp(name = "TeleopTesting", group = "Test")
+//@TeleOp(name = "TeleopTesting", group = "Test")
 public class TeleopTesting extends StateMachine_v5 {
 
     ColorSensor snsColor;

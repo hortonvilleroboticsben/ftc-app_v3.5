@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
-@TeleOp(name = "IMUTesting", group = "Test")
+//@TeleOp(name = "IMUTesting", group = "Test")
 public class IMUTesting extends StateMachine_v5 {
 
 

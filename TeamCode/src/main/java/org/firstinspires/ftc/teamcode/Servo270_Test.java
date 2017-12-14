@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "270 Testing", group = "Testing")
+//@TeleOp(name = "270 Testing", group = "Testing")
 public class Servo270_Test extends StateMachine_v5 {
     Servo srv270;
     int pos = 0;

@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name = "Block", group = "Test")
+//@Autonomous(name = "Block", group = "Test")
 public class GlyphColor extends StateMachine_v5 {
 
     boolean isRunning = false;
