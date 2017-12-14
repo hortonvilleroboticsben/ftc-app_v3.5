@@ -2,7 +2,13 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
 @TeleOp(name = "KungTeleop", group = "Testing")
@@ -34,12 +40,17 @@ public class KungTeleop extends StateMachine_v5 {
     boolean down = true;
     boolean flipOS = true;
 
+    boolean balanceOS = false;
+    boolean isBalancing = true;
+
     boolean gr1OS = false;
 
     int liftStage = 0;
 
     double GR2pos = 0;
     int GR1pos = 0;
+
+    Orientation axes;
 
     @Override
     public void init() {
@@ -58,6 +69,8 @@ public class KungTeleop extends StateMachine_v5 {
 
     @Override
     public void loop() {
+        axes = IMUnav.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+
         double pos = Math.abs(((get_encoder_count(mtrArmFlip) * 360 / 1700.)) / 360.);
         pos += adjustment;
         pos = pos >= 1 ? 1 : pos;
@@ -202,6 +215,20 @@ public class KungTeleop extends StateMachine_v5 {
                     srvGr1.setPosition(GR1CLOSED);
                 }
             }
+        }
+        if(gamepad1.guide && gamepad1.a && !balanceOS) {
+            balanceOS = true;
+            isBalancing = !isBalancing;
+        }else balanceOS = false;
+
+        if(isBalancing) {
+            if(axes.secondAngle > 3) {
+                mtrLeftDrive.setPower(0.2);
+                mtrRightDrive.setPower(0.2);
+            } else if(axes.secondAngle < -3) {
+                mtrLeftDrive.setPower(-0.2);
+                mtrRightDrive.setPower(-0.2);
+            } else isBalancing = false;
         }
         //srvGr1.setPosition(gr1Val);
 //        telemetry.addData("GR1pos", GR1pos);
